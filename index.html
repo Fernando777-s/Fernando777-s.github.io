@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para ti ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    background: #f7e6dc;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+/* CONTENEDOR */
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+}
+
+/* TEXTO */
+.text {
+    width: 40%;
+}
+
+.typing {
+    font-size: 24px;
+    border-right: 2px solid black;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* CONTADOR */
+.counter {
+    margin-top: 20px;
+    color: #555;
+    font-size: 16px;
+}
+
+/* 🌳 ÁRBOL */
+.tree {
+    position: relative;
+    width: 320px;
+    height: 420px;
+}
+
+.trunk {
+    position: absolute;
+    bottom: 0;
+    left: 150px;
+    width: 20px;
+    height: 130px;
+    background: #6b3e26;
+}
+
+/* ❤️ CORAZONES */
+.heart {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    transform: rotate(45deg);
+    animation: float 4s infinite ease-in-out;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: inherit;
+}
+
+.heart::before {
+    top: -6px;
+}
+
+.heart::after {
+    left: -6px;
+}
+
+/* ANIMACIONES */
+@keyframes float {
+    0% { transform: translateY(0) rotate(45deg); }
+    50% { transform: translateY(-20px) rotate(45deg); }
+    100% { transform: translateY(0) rotate(45deg); }
+}
+
+/* 💕 LLUVIA DE CORAZONES */
+.fall {
+    position: absolute;
+    top: -10px;
+    animation: fall 6s linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* 🧸 OSITOS */
+.bears {
+    margin-top: 20px;
+    font-size: 40px;
+}
+</style>
+
+</head>
+
+<body>
+
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+
+    <!-- 🌳 ÁRBOL -->
+    <div class="tree" id="tree">
+        <div class="trunk"></div>
+    </div>
+
+    <!-- 💌 TEXTO -->
+    <div class="text">
+        <div class="typing" id="typing"></div>
+
+        <div class="counter" id="counter"></div>
+
+        <div class="bears">🐻‍❄️❤️🐻</div>
+    </div>
+
+</div>
+
+<script>
+// ❤️ ÁRBOL
+const tree = document.getElementById("tree");
+
+for (let i = 0; i < 150; i++) {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+
+    heart.style.top = Math.random() * 280 + "px";
+    heart.style.left = Math.random() * 300 + "px";
+    heart.style.background = `hsl(${Math.random()*360},70%,65%)`;
+
+    tree.appendChild(heart);
+}
+
+// 💕 LLUVIA DE CORAZONES
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.className = "heart fall";
+
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.background = "pink";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+}, 300);
+
+// ✍️ TEXTO ROMÁNTICO
+const text = "Para la persona que amo... Hoy cumplimos 2 meses ❤️ y no cambiaría nada de lo que hemos vivido. Si pudiera elegir un lugar en el mundo, siempre sería a tu lado 💕";
+let i = 0;
+
+function typingEffect() {
+    if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typingEffect, 45);
+    }
+}
+
+typingEffect();
+
+// ⏳ CONTADOR (CAMBIA ESTA FECHA)
+const startDate = new Date("2026-03-06");
+
+function updateCounter() {
+    const now = new Date();
+    const diff = now - startDate;
+
+    let seconds = Math.floor(diff / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+
+    hours %= 24;
+    minutes %= 60;
+    seconds %= 60;
+
+    document.getElementById("counter").innerHTML =
+        `Nuestro tiempo juntos:<br>
+        ${days} días, ${hours} horas, ${minutes} minutos y ${seconds} segundos 💖`;
+}
+
+setInterval(updateCounter, 1000);
+</script>
+
+</body>
+</html>
