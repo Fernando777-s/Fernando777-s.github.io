@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para ti ❤️</title>
+
+<style>
+body{
+margin:0;
+background:#f7e6dc;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+font-family:Arial;
+overflow:hidden;
+}
+
+/* contenedor */
+.container{
+display:flex;
+align-items:center;
+gap:40px;
+}
+
+/* 🌳 árbol */
+.tree{
+position:relative;
+width:300px;
+height:350px;
+}
+
+.trunk{
+position:absolute;
+bottom:0;
+left:140px;
+width:20px;
+height:120px;
+background:#6b3e26;
+}
+
+/* ❤️ corazones */
+.heart{
+position:absolute;
+width:12px;
+height:12px;
+transform:rotate(45deg);
+}
+
+.heart::before,
+.heart::after{
+content:"";
+position:absolute;
+width:12px;
+height:12px;
+background:inherit;
+border-radius:50%;
+}
+
+.heart::before{top:-6px;}
+.heart::after{left:-6px;}
+
+/* texto */
+.text{
+width:300px;
+}
+
+.typing{
+font-size:20px;
+border-right:2px solid black;
+white-space:nowrap;
+overflow:hidden;
+}
+
+.counter{
+margin-top:20px;
+color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🌳 -->
+<div class="tree" id="tree">
+<div class="trunk"></div>
+</div>
+
+<!-- 💌 -->
+<div class="text">
+<div class="typing" id="typing"></div>
+<div class="counter" id="counter"></div>
+</div>
+
+</div>
+
+<script>
+// 🌳 forma de árbol real
+let tree=document.getElementById("tree");
+
+for(let i=0;i<180;i++){
+let y=Math.random()*250;
+let width=(250-y)*0.8;
+
+let x=150+(Math.random()-0.5)*width;
+
+let heart=document.createElement("div");
+heart.className="heart";
+
+heart.style.top=y+"px";
+heart.style.left=x+"px";
+heart.style.background=`hsl(${Math.random()*360},70%,60%)`;
+
+tree.appendChild(heart);
+}
+
+// ✍️ texto
+let text="Hola Yulisa Bonita JAJAJA,si las flores son blancas y tu las más bonita ( el diavlo ya no puedo decir piropos?💕";
+let i=0;
+
+function escribir(){
+if(i<text.length){
+document.getElementById("typing").innerHTML+=text[i];
+i++;
+setTimeout(escribir,50);
+}
+}
+escribir();
+
+// ⏳ contador
+let inicio=new Date("2025-08-06");
+
+function tiempo(){
+let ahora=new Date();
+let diff=ahora-inicio;
+
+let dias=Math.floor(diff/(1000*60*60*24));
+
+document.getElementById("counter").innerHTML=
+"Llevamos juntos: "+dias+" días 💖";
+}
+
+setInterval(tiempo,1000);
+</script>
+
+</body>
+</html>
