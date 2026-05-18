@@ -22,80 +22,83 @@ body {
 /* Contenedor adaptativo: Fila en PC, Columna en Celular */
 .container {
     display: flex;
-    flex-direction: column; /* Por defecto para celular */
+    flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
     width: 100%;
     max-width: 800px;
 }
 
-/* 🌳 árbol */
+/* 🌳 Área del árbol */
 .tree {
     position: relative;
-    width: 300px;
-    height: 350px;
+    width: 360px;
+    height: 380px;
     flex-shrink: 0;
 }
 
+/* Tronco con curvas más naturales en la base */
 .trunk {
     position: absolute;
     bottom: 0;
-    left: 140px;
+    left: 170px;
     width: 20px;
-    height: 120px;
+    height: 140px;
     background: #6b3e26;
+    border-radius: 10px 10px 4px 4px;
 }
 
-/* ❤️ corazones */
+/* ❤️ Mini corazones que forman la copa */
 .heart {
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     transform: rotate(45deg);
+    opacity: 0.9;
 }
 
 .heart::before,
 .heart::after {
     content: "";
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     background: inherit;
     border-radius: 50%;
 }
 
-.heart::before { top: -6px; }
-.heart::after { left: -6px; }
+.heart::before { top: -5px; }
+.heart::after { left: -5px; }
 
 /* Texto adaptativo */
 .text {
     width: 100%;
-    max-width: 350px;
-    text-align: center; /* Centrado en móvil */
+    max-width: 360px;
+    text-align: center;
 }
 
 .typing {
     font-size: 20px;
     font-weight: bold;
     color: #333;
-    line-height: 1.4;
-    display: inline; /* Permite que el texto salte de línea correctamente */
+    line-height: 1.5;
+    display: inline;
     border-right: 2px solid black;
     animation: parpadeo 0.7s infinite;
 }
 
 .counter {
-    margin-top: 20px;
+    margin-top: 25px;
     color: #555;
     font-size: 16px;
+    font-weight: 500;
 }
 
-/* Animación para la barra de escribir */
 @keyframes parpadeo {
     50% { border-color: transparent; }
 }
 
-/* 💻 Si la pantalla es grande (Computadora), se pone de lado */
+/* Pantallas grandes (Computadora) */
 @media (min-width: 768px) {
     .container {
         flex-direction: row;
@@ -124,55 +127,85 @@ body {
 </div>
 
 <script>
-// 🌳 Generar árbol de corazones
+// 🌳 Algoritmo para esculpir la copa en forma de Corazón Real
 let tree = document.getElementById("tree");
+const totalCorazones = 220; 
 
-for(let i=0; i<180; i++){
-    let y = Math.random() * 240; // Ajustado para que no queden flotando tan arriba del tronco
-    let width = (240 - y) * 0.85;
+// Paleta de colores románticos (Rosas, Rojos, Naranjas suaves, Amarillos pastel)
+const colores = [
+    '#ff4d6d', '#ff758f', '#ff8fa3', '#ffb3c1', 
+    '#ffccd5', '#ff4757', '#ee5253', '#ffbe76', 
+    '#ff9f43', '#feca57'
+];
 
-    let x = 144 + (Math.random() - 0.5) * width; // Centrado exacto con el tronco
+for (let i = 0; i < totalCorazones; i++) {
+    // Usamos la fórmula matemática paramétrica del corazón
+    let t = Math.random() * 2 * Math.PI;
+    
+    // Ecuación base del corazón
+    let heartX = 16 * Math.pow(Math.sin(t), 3);
+    let heartY = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+    
+    // Dispersión hacia el centro para que no quede vacío por dentro
+    let r = Math.random(); 
+    heartX *= r;
+    heartY *= r;
+
+    // Escalar y posicionar en el área de la copa
+    // El centro de la copa estará a X: 180px, Y: 140px
+    let x = 180 + (heartX * 9); 
+    let y = 145 - (heartY * 9); // Invertido porque en web la 'Y' crece hacia abajo
 
     let heart = document.createElement("div");
     heart.className = "heart";
-
-    heart.style.top = y + "px";
-    heart.style.left = x + "px";
-    heart.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+    
+    // Variación sutil de tamaño para verse más natural
+    let scale = 0.7 + Math.random() * 0.6;
+    heart.style.transform = `max-width(10px) rotate(45deg) scale(${scale})`;
+    
+    heart.style.left = (x - 5) + "px";
+    heart.style.top = (y - 5) + "px";
+    
+    // Elegir un color al azar de nuestra paleta romántica
+    heart.style.background = colores[Math.floor(Math.random() * colores.length)];
 
     tree.appendChild(heart);
 }
 
-// ✍️ Texto animado corregido para saltos de línea
-let text = "holaaaaaa Sary linda , Sarita bella mi negra bella, te amooooo muchísimo 💕";
-let i = 0;
+// ✍️ Animación de Texto para Sarita
+let text = "holaaaaaa Sary linda , Sarita bella mi negra bella, te amooooo muchísimo , eres mi bebé tiquita , eres el Tajín de mi mango 💕";
+let index = 0;
 let typingElement = document.getElementById("typing");
 
-function escribir(){
-    if(i < text.length){
-        typingElement.textContent += text[i];
-        i++;
+function escribir() {
+    if (index < text.length) {
+        typingElement.textContent += text[index];
+        index++;
         setTimeout(escribir, 50);
     } else {
-        // Quita la barra negra al terminar de escribir
         typingElement.style.borderRight = "none";
     }
 }
-// Iniciar animación
 escribir();
 
-// ⏳ Contador de tiempo
-let inicio = new Date("2026-03-06");
+// ⏳ Contador preciso desde el 21 de Junio de 2023
+// El formato Date toma (Año, Mes-1, Día) -> Junio es mes 5 en JS (0=Enero, 5=Junio)
+let inicio = new Date(2023, 5, 21); 
 
-function tiempo(){
+function tiempo() {
     let ahora = new Date();
     let diff = ahora - inicio;
+    
+    // Cálculos de tiempo
     let dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
     document.getElementById("counter").innerHTML = "Llevamos juntos: " + dias + " días 💖";
 }
 
-tiempo(); // Ejecutar de inmediato
-setInterval(tiempo, 1000 * 60 * 60); // Actualizar cada hora es suficiente
+// Inicializar contador
+tiempo();
+// Actualizar dinámicamente cada hora
+setInterval(tiempo, 1000 * 60 * 60);
 </script>
 
 </body>
